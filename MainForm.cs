@@ -6530,7 +6530,7 @@ namespace iSpyApplication
             this.MinimumSize = new System.Drawing.Size(50, 50);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "iSpy";
+            this.Text = "Smart Camera";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.MainFormHelpButtonClicked);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing1);
