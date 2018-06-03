@@ -6311,7 +6311,7 @@ namespace iSpyApplication
             this.tsslPRO.IsLink = true;
             this.tsslPRO.LinkColor = System.Drawing.Color.Blue;
             this.tsslPRO.Name = "tsslPRO";
-            this.tsslPRO.Size = new System.Drawing.Size(58, 25);
+            this.tsslPRO.Size = new System.Drawing.Size(59, 25);
             this.tsslPRO.Text = "Try Agent";
             this.tsslPRO.VisitedLinkColor = System.Drawing.Color.Blue;
             this.tsslPRO.Click += new System.EventHandler(this.tsslPRO_Click);

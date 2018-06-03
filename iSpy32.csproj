@@ -7,7 +7,7 @@
     <ProjectGuid>{F4799C73-DEE9-48F2-B626-32149CC30976}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>ispy.ico</ApplicationIcon>
+    <ApplicationIcon>camera.ico</ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>iSpy</AssemblyName>
@@ -1479,6 +1479,7 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="camera.ico" />
     <Content Include="DLLS\AForge.dll" />
     <Content Include="DLLS\AForge.Imaging.dll" />
     <Content Include="DLLS\AForge.Math.dll" />
@@ -1526,6 +1527,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Resources\security-camera-icon.png" />
+    <None Include="Resources\if_web_camera_45452.png" />
+    <Content Include="Treetog-Junior-Security-camera.ico" />
     <Content Include="XML\Translations.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

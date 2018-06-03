@@ -32,8 +32,8 @@
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this._btnOk = new System.Windows.Forms.Button();
             this._ddlLanguage = new System.Windows.Forms.ComboBox();
-            this.pnlWBContainer = new System.Windows.Forms.Panel();
             this.chkShowGettingStarted = new System.Windows.Forms.CheckBox();
+            this.pnlWBContainer = new System.Windows.Forms.Panel();
             this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -73,14 +73,6 @@
             this._ddlLanguage.TabIndex = 52;
             this._ddlLanguage.SelectedIndexChanged += new System.EventHandler(this._ddlLanguage_SelectedIndexChanged);
             // 
-            // pnlWBContainer
-            // 
-            this.pnlWBContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlWBContainer.Location = new System.Drawing.Point(0, 0);
-            this.pnlWBContainer.Name = "pnlWBContainer";
-            this.pnlWBContainer.Size = new System.Drawing.Size(581, 429);
-            this.pnlWBContainer.TabIndex = 3;
-            // 
             // chkShowGettingStarted
             // 
             this.chkShowGettingStarted.AutoSize = true;
@@ -91,6 +83,14 @@
             this.chkShowGettingStarted.TabIndex = 53;
             this.chkShowGettingStarted.Text = "Show Getting Started";
             this.chkShowGettingStarted.UseVisualStyleBackColor = true;
+            // 
+            // pnlWBContainer
+            // 
+            this.pnlWBContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlWBContainer.Location = new System.Drawing.Point(0, 0);
+            this.pnlWBContainer.Name = "pnlWBContainer";
+            this.pnlWBContainer.Size = new System.Drawing.Size(581, 429);
+            this.pnlWBContainer.TabIndex = 3;
             // 
             // GettingStarted
             // 

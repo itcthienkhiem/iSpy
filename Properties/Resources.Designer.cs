@@ -673,6 +673,16 @@ namespace iSpyApplication.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap if_web_camera_45452 {
+            get {
+                object obj = ResourceManager.GetObject("if_web_camera_45452", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap inactive {
             get {
                 object obj = ResourceManager.GetObject("inactive", resourceCulture);
@@ -996,6 +1006,16 @@ namespace iSpyApplication.Properties {
         internal static System.Drawing.Bitmap schedule {
             get {
                 object obj = ResourceManager.GetObject("schedule", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap security_camera_icon {
+            get {
+                object obj = ResourceManager.GetObject("security_camera_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
