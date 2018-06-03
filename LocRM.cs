@@ -25,7 +25,9 @@ namespace iSpyApplication
                 if (_translationsList != null)
                     return _translationsList;
                 var s = new XmlSerializer(typeof (Translations));
-                string p = Program.AppDataPath + @"\XML\Translations.xml";
+                //string p = Program.AppDataPath + @"\XML\Translations.xml";
+                //khiemnt edit lay tu thu muc chay chuogn trinh 
+                string p = @"XML\Translations.xml";
 //#if DEBUG
 //                p = Program.AppPath+ @"\XML\Translations.xml";
 //#endif

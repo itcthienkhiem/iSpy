@@ -7,7 +7,7 @@
     <ProjectGuid>{F4799C73-DEE9-48F2-B626-32149CC30976}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>camera.ico</ApplicationIcon>
+    <ApplicationIcon>if_web_camera_45452.ico</ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>iSpy</AssemblyName>
@@ -1529,6 +1529,7 @@
     </None>
     <None Include="Resources\security-camera-icon.png" />
     <None Include="Resources\if_web_camera_45452.png" />
+    <Content Include="if_web_camera_45452.ico" />
     <Content Include="Treetog-Junior-Security-camera.ico" />
     <Content Include="XML\Translations.xml">
       <SubType>Designer</SubType>
