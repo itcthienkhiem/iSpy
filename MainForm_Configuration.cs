@@ -173,7 +173,10 @@ namespace iSpyApplication
                 bool loaded = false;
                 lock (ThreadLock)
                 {
-                    using (var fs = new FileStream(Program.AppDataPath + @"XML\config.xml", FileMode.Open))
+                    //khiemnt edit 04.06.2018 for get xml from run programe
+                    using (var fs = new FileStream(@"XML\config.xml", FileMode.Open))
+
+//                    using (var fs = new FileStream(Program.AppDataPath + @"XML\config.xml", FileMode.Open))
                     {
                         try
                         {

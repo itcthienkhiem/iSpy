@@ -1214,8 +1214,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\DataSources\System.Xml.XmlElement.datasource" />
+    <None Include="Service References\DeviceClient\common.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\DeviceClient\configuration91.svcinfo" />
     <None Include="Service References\DeviceClient\configuration.svcinfo" />
+    <None Include="Service References\DeviceClient\devicemgmt1.wsdl" />
     <None Include="Service References\DeviceClient\iSpyApplication.DeviceClient.BackupFile.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -1267,6 +1271,9 @@
     <None Include="Service References\DeviceClient\iSpyApplication.DeviceClient.IPAddressFilter.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\DeviceClient\iSpyApplication.DeviceClient.LocationEntity.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\DeviceClient\iSpyApplication.DeviceClient.NetworkGateway.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -1314,6 +1321,9 @@
     </None>
     <None Include="Service References\DeviceClient\iSpyApplication.DeviceClient.User.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\DeviceClient\onvif1.xsd">
+      <SubType>Designer</SubType>
     </None>
     <None Include="Service References\DeviceClient\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
@@ -1479,7 +1489,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="camera.ico" />
     <Content Include="DLLS\AForge.dll" />
     <Content Include="DLLS\AForge.Imaging.dll" />
     <Content Include="DLLS\AForge.Math.dll" />
@@ -1530,7 +1539,6 @@
     <None Include="Resources\security-camera-icon.png" />
     <None Include="Resources\if_web_camera_45452.png" />
     <Content Include="if_web_camera_45452.ico" />
-    <Content Include="Treetog-Junior-Security-camera.ico" />
     <Content Include="XML\Translations.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1691,14 +1699,10 @@
     <None Include="Service References\DeviceClient\bf-2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\DeviceClient\devicemgmt.wsdl" />
     <None Include="Service References\DeviceClient\include.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\DeviceClient\item.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DeviceClient\onvif.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\DeviceClient\t-1.xsd">
