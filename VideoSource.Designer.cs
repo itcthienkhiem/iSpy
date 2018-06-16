@@ -570,7 +570,7 @@ namespace iSpyApplication
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(6);
-            this.tabPage3.Size = new System.Drawing.Size(725, 288);
+            this.tabPage3.Size = new System.Drawing.Size(192, 74);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "FFMPEG (H264)";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -601,7 +601,7 @@ namespace iSpyApplication
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(713, 159);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(163, 159);
             this.tableLayoutPanel3.TabIndex = 25;
             // 
             // label4
@@ -611,7 +611,7 @@ namespace iSpyApplication
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.Location = new System.Drawing.Point(75, 27);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(635, 78);
+            this.label4.Size = new System.Drawing.Size(320, 78);
             this.label4.TabIndex = 25;
             this.label4.Text = "Enter a URL to a stream.\r\n\r\nexamples:\r\n\r\nmmsh://live1.wm.skynews.servecast.net/sk" +
     "ynews_wmlz_live300k\r\nhttp://username:password@192.168.1.33/videostream.asf\r\n";
