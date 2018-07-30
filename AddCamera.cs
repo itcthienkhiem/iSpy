@@ -2489,7 +2489,10 @@ namespace iSpyApplication
                     url =("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/drive&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&client_id=648753488389.apps.googleusercontent.com&access_type=offline");
                     break;
                 case "youtube":
-                    url =("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/youtube.upload&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&client_id=648753488389.apps.googleusercontent.com&access_type=offline");
+                    //url =("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/youtube.upload&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&client_id=648753488389.apps.googleusercontent.com&access_type=offline");
+                    //url = ("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/youtube.upload&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&client_id=292824132082.apps.googleusercontent.com&access_type=offline");
+                    url = ("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/youtube.upload&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&client_id=995370522863-pg6nbbpsqd5u4tkrrciddkb9g22u906d.apps.googleusercontent.com&access_type=offline");
+
                     break;
                 case "dropbox":
                     url =("https://www.dropbox.com/oauth2/authorize?client_id=6k40bpqlz573mqt&redirect_uri=" + rurl + "/responsecode.aspx&response_type=code");
