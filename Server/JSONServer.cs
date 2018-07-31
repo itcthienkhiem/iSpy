@@ -85,35 +85,35 @@ namespace iSpyApplication.Server
             switch (cmd)
             {
                 case "querylevel":
-                {
-                    float fLevel = 0;
-                    switch (ot)
                     {
-                        case 1:
-                            vl = MainForm.InstanceReference.GetVolumeLevel(oid);
-                            if (vl != null)
-                            {
-                                var v = vl.Levels;
-                                if (v == null)
-                                    fLevel = 0;
-                                else
+                        float fLevel = 0;
+                        switch (ot)
+                        {
+                            case 1:
+                                vl = MainForm.InstanceReference.GetVolumeLevel(oid);
+                                if (vl != null)
                                 {
-                                    fLevel = vl.Levels.Max();
-                                    fLevel = Math.Min(1, fLevel/vl.Micobject.detector.gain);
+                                    var v = vl.Levels;
+                                    if (v == null)
+                                        fLevel = 0;
+                                    else
+                                    {
+                                        fLevel = vl.Levels.Max();
+                                        fLevel = Math.Min(1, fLevel / vl.Micobject.detector.gain);
+                                    }
                                 }
-                            }
-                            break;
-                        case 2:
-                            cw = MainForm.InstanceReference.GetCameraWindow(oid);
-                            if (cw?.Camera != null)
-                            {
-                                fLevel = cw.Camera.MotionLevel;
-                                fLevel = Math.Min(1, (fLevel/cw.Camobject.detector.gain));
-                            }
-                            break;
+                                break;
+                            case 2:
+                                cw = MainForm.InstanceReference.GetCameraWindow(oid);
+                                if (cw?.Camera != null)
+                                {
+                                    fLevel = cw.Camera.MotionLevel;
+                                    fLevel = Math.Min(1, (fLevel / cw.Camobject.detector.gain));
+                                }
+                                break;
+                        }
+                        resp = "{\"level\":" + fLevel.ToString(CultureInfo.InvariantCulture) + "}";
                     }
-                    resp = "{\"level\":" + fLevel.ToString(CultureInfo.InvariantCulture) + "}";
-                }
                     break;
                 case "adddevice":
                     var stid = Convert.ToInt32(GetVar(sPhysicalFilePath, "sourceTypeID"));
@@ -126,7 +126,7 @@ namespace iSpyApplication.Server
                             oid = MainForm.NextCameraId;
                             break;
                     }
-                    MainForm.InstanceReference.AddObjectExternal(ot,stid,640,480,"","");
+                    MainForm.InstanceReference.AddObjectExternal(ot, stid, 640, 480, "", "");
                     resp = "{\"actionResult\":\"editsource\",\"typeID\":" + ot + ",\"ID\":" + oid + "}";
                     break;
                 case "createfromwizard":
@@ -164,9 +164,9 @@ namespace iSpyApplication.Server
 
 
                                 oid = MainForm.NextCameraId;
-                                
-                                cw = (CameraWindow) MainForm.InstanceReference.AddObjectExternal(2, sourceTypeID,640,480,"",sourceUri);
-                                    
+
+                                cw = (CameraWindow)MainForm.InstanceReference.AddObjectExternal(2, sourceTypeID, 640, 480, "", sourceUri);
+
                                 cw.Camobject.settings.videosourcestring = sourceUri;
                                 cw.Camobject.settings.cookies = mmurl.cookies;
                                 cw.Camobject.settings.login = username;
@@ -242,11 +242,11 @@ namespace iSpyApplication.Server
                                     cw.Camobject.settings.audiousername = username;
                                     cw.Camobject.settings.audiopassword = password;
                                 }
-                                
+
                                 cw.Camobject.settings.tokenconfig.tokenpath = mmurl.tokenPath;
                                 cw.Camobject.settings.tokenconfig.tokenpost = mmurl.tokenPost;
                                 cw.Camobject.settings.tokenconfig.tokenport = mmurl.tokenPort;
-                                
+
 
                                 if (audioSourceTypeID > -1)
                                 {
@@ -309,9 +309,9 @@ namespace iSpyApplication.Server
                                     var ipranges = MainForm.AddressListIPv4.Select(ip => ip.ToString()).Select(subnet => subnet.Substring(0, subnet.LastIndexOf(".", StringComparison.Ordinal) + 1) + "x").ToList();
                                     manager = new Thread(p => _scanner.PortScannerManager(ipranges, ports))
                                     {
-                                        Name ="Port Scanner",
-                                        IsBackground=true,
-                                        Priority=ThreadPriority.Normal
+                                        Name = "Port Scanner",
+                                        IsBackground = true,
+                                        Priority = ThreadPriority.Normal
                                     };
                                 }
                                 else
@@ -320,7 +320,7 @@ namespace iSpyApplication.Server
                                     {
                                         Name = "ARP Scanner",
                                         IsBackground = true,
-                                        Priority =ThreadPriority.Normal
+                                        Priority = ThreadPriority.Normal
                                     };
                                 }
                                 manager.Start();
@@ -349,14 +349,14 @@ namespace iSpyApplication.Server
                         Uri uri;
                         if (!Uri.TryCreate(GetVar(sPhysicalFilePath, "url"), UriKind.Absolute, out uri))
                         {
-                            resp = "{\"error\":\""+LocRm.GetString("InvalidURL",lc)+"\"}";
+                            resp = "{\"error\":\"" + LocRm.GetString("InvalidURL", lc) + "\"}";
                             break;
                         }
                         var make = GetVar(sPhysicalFilePath, "make");
                         var m = MainForm.Sources.FirstOrDefault(p => string.Equals(p.name, make, StringComparison.InvariantCultureIgnoreCase));
                         if (m == null)
                         {
-                            resp = "{\"error\":\""+LocRm.GetString("ChooseMake", lc) +"\"}";
+                            resp = "{\"error\":\"" + LocRm.GetString("ChooseMake", lc) + "\"}";
                             break;
                         }
                         make = m.name;
@@ -442,9 +442,9 @@ namespace iSpyApplication.Server
                     }
                     break;
                 case "loadapi":
-                {
-                    resp = BuildApijson(r,lc);
-                }
+                    {
+                        resp = BuildApijson(r, lc);
+                    }
                     break;
                 case "authorise":
                     {
@@ -523,14 +523,14 @@ namespace iSpyApplication.Server
                         string provider = GetVar(sPhysicalFilePath, "provider");
                         t = "{{\"provider\":\"{0}\",\"url\":\"{1}\",\"message\":\"{2}\",\"error\":\"{3}\"}}";
                         string url = "", message = "", error = "";
-                        
+
                         switch (provider.ToLower())
                         {
                             case "flickr":
                                 url = Flickr.GetAuthoriseURL(out error);
                                 break;
                         }
-                        
+
 
                         resp = string.Format(t, provider, url, message, error);
                     }
@@ -544,16 +544,17 @@ namespace iSpyApplication.Server
                         try
                         {
                             var dev = new ONVIFDevice(url, un, pwd);
-                            int i = 0;
-
-                            foreach (var p in dev.Profiles)
+                            var p = dev.Profiles;
+                            if (p == null)
+                                throw new ApplicationException("ONVIF failed to connect");
+                            for (int i = 0; i < p.Length; i++)
                             {
-                                var b = p?.VideoSourceConfiguration?.Bounds;
-                                if (b != null && b.width > 0)
+                                dev.SelectProfile(i);
+                                var ep = dev.Endpoint;
+                                if (ep != null && ep.Width > 0)
                                 {
-                                    resp += string.Format(template, b.width + "x" + b.height, i);
+                                    resp += string.Format(template, dev.Profile.Name + " (" + ep.Width + "x" + ep.Height + ")", i);
                                 }
-                                i++;
                             }
                         }
                         catch (Exception ex)
@@ -625,7 +626,7 @@ namespace iSpyApplication.Server
                                     }
                                     resp = resp.Replace("SOURCEEDITOR", se);
 
-                                    dynamic d = PopulateResponse(resp, om,lc);
+                                    dynamic d = PopulateResponse(resp, om, lc);
                                     d.task = task;
                                     resp = JsonConvert.SerializeObject(d);
                                 }
@@ -704,7 +705,7 @@ namespace iSpyApplication.Server
                                             break;
                                         case "4":
                                             string screens = "";
-                                            int i = 0,j=0;
+                                            int i = 0, j = 0;
                                             foreach (Screen s in Screen.AllScreens)
                                             {
                                                 screens += string.Format(template, s.DeviceName.JsonSafe(),
@@ -717,15 +718,16 @@ namespace iSpyApplication.Server
                                             if (oc.settings.videosourcestring == null)
                                                 oc.settings.videosourcestring = j.ToString(CultureInfo.InvariantCulture);
                                             var area = "[]";
-                                            if (oc.settings.desktoparea != null) { 
+                                            if (oc.settings.desktoparea != null)
+                                            {
                                                 int[] arr = System.Array.ConvertAll(oc.settings.desktoparea.Split(','), int.Parse);
                                                 if (arr.Length == 4)
                                                 {
                                                     var sc = Screen.AllScreens[j];
-                                                    arr[0] = Math.Min(100, Convert.ToInt32((Convert.ToDecimal(arr[0])/sc.WorkingArea.Width)*100));
-                                                    arr[1] = Math.Min(100, Convert.ToInt32((Convert.ToDecimal(arr[1])/sc.WorkingArea.Height)*100));
-                                                    arr[2] = Math.Min(100, Convert.ToInt32((Convert.ToDecimal(arr[2])/sc.WorkingArea.Width)*100));
-                                                    arr[3] = Math.Min(100, Convert.ToInt32((Convert.ToDecimal(arr[3])/sc.WorkingArea.Height)*100));
+                                                    arr[0] = Math.Min(100, Convert.ToInt32((Convert.ToDecimal(arr[0]) / sc.WorkingArea.Width) * 100));
+                                                    arr[1] = Math.Min(100, Convert.ToInt32((Convert.ToDecimal(arr[1]) / sc.WorkingArea.Height) * 100));
+                                                    arr[2] = Math.Min(100, Convert.ToInt32((Convert.ToDecimal(arr[2]) / sc.WorkingArea.Width) * 100));
+                                                    arr[3] = Math.Min(100, Convert.ToInt32((Convert.ToDecimal(arr[3]) / sc.WorkingArea.Height) * 100));
                                                     area = "[{\"x\":" + arr[0] + ",\"y\":" + arr[1] + ",\"w\":" + arr[2] +
                                                            ",\"h\":" + arr[3] + "}]";
                                                 }
@@ -821,7 +823,7 @@ namespace iSpyApplication.Server
                     }
                     break;
                 case "editstorage":
-                {
+                    {
                         var ident = GetVar(sPhysicalFilePath, "ident");
                         resp = File.ReadAllText(r + @"api\editstorage.json");
                         if (ident != "new")
@@ -861,7 +863,7 @@ namespace iSpyApplication.Server
                             t += string.Format(template, (aa.mode + ": " + ae.Summary).JsonSafe(), aa.ident);
                         }
                         resp = resp.Replace("ALERTLIST", t.Trim(','));
-                        
+
 
                         if (ident != "new")
                         {
@@ -930,13 +932,13 @@ namespace iSpyApplication.Server
                         var par = "";
                         bool bGrab;
                         var action = MainForm.Actions.FirstOrDefault(p => p.ident == ident) ?? new objectsActionsEntry
-                                                                                           {
-                                                                                               mode = "alert",
-                                                                                               active = true,
-                                                                                               objectid = oid,
-                                                                                               objecttypeid = ot,
-                                                                                               type = "S"
-                                                                                           };
+                        {
+                            mode = "alert",
+                            active = true,
+                            objectid = oid,
+                            objecttypeid = ot,
+                            type = "S"
+                        };
 
                         string id = GetVar(sPhysicalFilePath, "id").ToUpper();
                         if (id != "")
@@ -957,7 +959,7 @@ namespace iSpyApplication.Server
                                 par = string.Format(template, LocRm.GetString("File", lc), "\"" + action.param1.JsonSafe() + "\"", "Select",
                                     "param1",
                                     ",\"options\":[" + GetFileOptionsList("Sounds", "*.wav") +
-                                    "],\"help\":\""+LocRm.GetString("AddSounds", lc) +": " + (Program.AppPath + "sounds").JsonSafe() + "\"");
+                                    "],\"help\":\"" + LocRm.GetString("AddSounds", lc) + ": " + (Program.AppPath + "sounds").JsonSafe() + "\"");
                                 break;
                             case "EXE":
                                 par = string.Format(template, LocRm.GetString("File", lc), "\"" + action.param1.JsonSafe() + "\"", "Select",
@@ -1127,7 +1129,7 @@ namespace iSpyApplication.Server
                         resp = resp.Replace("ACTIONS", t.Trim(','));
 
                         resp = Translate(resp, lc);
-                        
+
                     }
                     break;
                 case "deleteaction":
@@ -1156,7 +1158,7 @@ namespace iSpyApplication.Server
                         lname.AddRange(MainForm.Microphones.Where(p => p.settings.directoryIndex == id).Select(p => p.name));
                         if (lname.Count > 0)
                         {
-                            resp = "{\"error\":\""+LocRm.GetString("ReassignAllCamerasMedia", lc) +"\"}";
+                            resp = "{\"error\":\"" + LocRm.GetString("ReassignAllCamerasMedia", lc) + "\"}";
                             break;
                         }
                         var lTemp = MainForm.Conf.MediaDirectories.ToList();
@@ -1232,10 +1234,10 @@ namespace iSpyApplication.Server
                                         break;
 
                                     case "-5":
-                                    {
-                                        var cc = MainForm.InstanceReference.GetCameraWindow(oid);
-                                        lcomms.AddRange(cc.PTZ.ONVIFPresets.Select(c => new Helper.ListItem(c.Name, c.Name)));
-                                    }
+                                        {
+                                            var cc = MainForm.InstanceReference.GetCameraWindow(oid);
+                                            lcomms.AddRange(cc.PTZ.ONVIFPresets.Select(c => new Helper.ListItem(c.Name, c.Name)));
+                                        }
                                         break;
 
                                     default:
@@ -1323,7 +1325,7 @@ namespace iSpyApplication.Server
                                     resp = resp.Replace("FTPSERVERS", ftps.Trim(','));
 
 
-                                    
+
                                     resp = resp.Replace("MASKS", GetFileOptionsList("Masks", "*.png"));
 
 
@@ -1347,7 +1349,7 @@ namespace iSpyApplication.Server
                                     if (ptzEntry?.ExtendedCommands?.Command != null)
                                     {
                                         commands = ptzEntry.ExtendedCommands.Command.Aggregate(commands,
-                                            (current, extcmd) => current + string.Format(template, extcmd.Name.JsonSafe(), extcmd.Value));
+                                            (current, extcmd) => current + string.Format(template, extcmd.Name.JsonSafe(), extcmd.Value.JsonSafe()));
                                     }
                                     if (commands == "")
                                     {
@@ -1542,21 +1544,21 @@ namespace iSpyApplication.Server
                     }
                     break;
                 case "getcmdlist":
-                {
-                    var l = "";
-                    t = "{{\"id\":{0},\"name\":\"{1}\"}},";
-                    foreach (objectsCommand ocmd in MainForm.RemoteCommands)
                     {
-                        string n = ocmd.name;
-                        if (n.StartsWith("cmd_"))
+                        var l = "";
+                        t = "{{\"id\":{0},\"name\":\"{1}\"}},";
+                        foreach (objectsCommand ocmd in MainForm.RemoteCommands)
                         {
-                            n = LocRm.GetString(ocmd.name, lc);
-                        }
+                            string n = ocmd.name;
+                            if (n.StartsWith("cmd_"))
+                            {
+                                n = LocRm.GetString(ocmd.name, lc);
+                            }
 
-                        l += string.Format(t, ocmd.id, n.JsonSafe());
+                            l += string.Format(t, ocmd.id, n.JsonSafe());
+                        }
+                        resp = "{\"commands\":[" + l.Trim(',') + "]}";
                     }
-                    resp = "{\"commands\":[" + l.Trim(',') + "]}";
-                }
                     break;
                 case "executecmd":
                     {
@@ -1600,33 +1602,33 @@ namespace iSpyApplication.Server
                     }
                     break;
                 case "getgraph":
-                {
-                    FilesFile ff = null;
-                    t = "{{\"duration\":{0},\"threshold\":{1},\"raw\":[{2}]}}";
+                    {
+                        FilesFile ff = null;
+                        t = "{{\"duration\":{0},\"threshold\":{1},\"raw\":[{2}]}}";
 
-                    vl = io as VolumeLevel;
-                    string fn = GetVar(sPhysicalFilePath, "fn");
-                    if (vl != null)
-                    {
-                        ff = vl.FileList.FirstOrDefault(p => p.Filename == fn);
-                    }
-                    cw = io as CameraWindow;
-                    if (cw != null)
-                    {
-                        ff = cw.FileList.FirstOrDefault(p => p.Filename == fn);
-                    }
+                        vl = io as VolumeLevel;
+                        string fn = GetVar(sPhysicalFilePath, "fn");
+                        if (vl != null)
+                        {
+                            ff = vl.FileList.FirstOrDefault(p => p.Filename == fn);
+                        }
+                        cw = io as CameraWindow;
+                        if (cw != null)
+                        {
+                            ff = cw.FileList.FirstOrDefault(p => p.Filename == fn);
+                        }
 
 
-                    if (ff != null)
-                    {
-                        resp = string.Format(t, ff.DurationSeconds,
-                            string.Format(CultureInfo.InvariantCulture, "{0:0.000}", ff.TriggerLevel), ff.AlertData);
+                        if (ff != null)
+                        {
+                            resp = string.Format(t, ff.DurationSeconds,
+                                string.Format(CultureInfo.InvariantCulture, "{0:0.000}", ff.TriggerLevel), ff.AlertData);
+                        }
+                        else
+                        {
+                            resp = string.Format(t, 0, 0, "");
+                        }
                     }
-                    else
-                    {
-                        resp = string.Format(t, 0, 0, "");
-                    }
-                }
                     break;
                 case "ptzcommand":
                     cw = io as CameraWindow;
@@ -1655,14 +1657,14 @@ namespace iSpyApplication.Server
                     }
                     break;
                 case "getevents":
-                {
+                    {
                         string num = GetVar(sPhysicalFilePath, "num");
                         if (num == "")
                             num = "500";
                         int n = Convert.ToInt32(num);
 
                         DateTime timestamp = Helper.Now;
-                        
+
                         sd = GetVar(sPhysicalFilePath, "startdate");
                         ed = GetVar(sPhysicalFilePath, "enddate");
 
@@ -1677,7 +1679,7 @@ namespace iSpyApplication.Server
 
                         if (edl < long.MaxValue)
                             ffs = ffs.FindAll(f => f.CreatedDateTicksUTC < edl);
-                            
+
                         ffs = ffs.Take(n).ToList();
                         var sb = new StringBuilder();
                         sb.Append("[");
@@ -1690,7 +1692,7 @@ namespace iSpyApplication.Server
                             sb.Append(",\"created\":");
                             sb.Append(string.Format(CultureInfo.InvariantCulture, "{0:0.00}", f.CreatedDateTicksUTC));
                             sb.Append(",\"maxalarm\":");
-                            sb.Append(string.Format(CultureInfo.InvariantCulture, "{0:0.0}",f.MaxAlarm));
+                            sb.Append(string.Format(CultureInfo.InvariantCulture, "{0:0.0}", f.MaxAlarm));
                             sb.Append(",\"duration\": ");
                             sb.Append(f.Duration);
                             sb.Append(",\"filename\":\"");
@@ -1700,7 +1702,7 @@ namespace iSpyApplication.Server
                         resp = sb.ToString().Trim(',') + "]";
 
                         var tzo = Convert.ToInt32(TimeZone.CurrentTimeZone.GetUtcOffset(new DateTime()).TotalMinutes);
-                        resp = "{\"timeStamp\":" + timestamp.Ticks + ",\"timezoneOffset\":"+tzo+",\"events\": " + resp + "}";
+                        resp = "{\"timeStamp\":" + timestamp.Ticks + ",\"timezoneOffset\":" + tzo + ",\"events\": " + resp + "}";
                     }
                     break;
                 //post commands
@@ -1708,7 +1710,7 @@ namespace iSpyApplication.Server
                     {
                         var d = getJSONObject(sBuffer);
                         t = YouTubeUploader.Upload(oid, Helper.GetFullPath(ot, oid) + d.files[0].name, out success);
-                        resp = "{\"action\":\"" + cmd + "\",\"status\":\"" + (success ? "ok" : "Upload Failed ("+t.JsonSafe()+")") + "\"}";
+                        resp = "{\"action\":\"" + cmd + "\",\"status\":\"" + (success ? "ok" : "Upload Failed (" + t.JsonSafe() + ")") + "\"}";
                     }
                     break;
                 case "uploadcloud":
@@ -1727,7 +1729,7 @@ namespace iSpyApplication.Server
                             files.Add(file.name.ToString());
                         }
 
-                        DeleteFiles(oid,ot, files);
+                        DeleteFiles(oid, ot, files);
 
                         resp = "{\"action\":\"" + cmd + "\",\"status\":\"ok\"}";
                     }
@@ -1783,15 +1785,15 @@ namespace iSpyApplication.Server
                                     files.Add(file.name.ToString());
                                 }
 
-                                if (files.Count>0)
+                                if (files.Count > 0)
                                 {
-                                    DeleteFiles(oid,ot, files);
+                                    DeleteFiles(oid, ot, files);
                                 }
 
                             }
                             else
                             {
-                                
+
                                 t = LocRm.GetString("InvalidDirectory", lc);
                             }
                         }
@@ -1953,140 +1955,140 @@ namespace iSpyApplication.Server
                 switch (nl)
                 {
                     default:
-                    {
-                        resp = "{\"error\":\"" + nl + " not recognized\"}";
-                        saveObjects = false;
-                    }
+                        {
+                            resp = "{\"error\":\"" + nl + " not recognized\"}";
+                            saveObjects = false;
+                        }
                         break;
                     case "liveupdate":
-                    {
-                        switch (ot)
                         {
-                            case 1:
+                            switch (ot)
                             {
-                                var c = MainForm.Microphones.FirstOrDefault(p => p.id == oid);
-                                if (c != null)
-                                {
-                                    PopulateObject(d, c);
-                                }
+                                case 1:
+                                    {
+                                        var c = MainForm.Microphones.FirstOrDefault(p => p.id == oid);
+                                        if (c != null)
+                                        {
+                                            PopulateObject(d, c);
+                                        }
+                                    }
+                                    break;
+                                case 2:
+                                    {
+                                        var c = MainForm.Cameras.FirstOrDefault(p => p.id == oid);
+                                        if (c != null)
+                                        {
+                                            PopulateObject(d, c);
+                                        }
+                                    }
+                                    break;
                             }
-                                break;
-                            case 2:
-                            {
-                                var c = MainForm.Cameras.FirstOrDefault(p => p.id == oid);
-                                if (c != null)
-                                {
-                                    PopulateObject(d, c);
-                                }
-                            }
-                                break;
+                            apply = true;
+                            saveObjects = false;
                         }
-                        apply = true;
-                        saveObjects = false;
-                    }
                         break;
                     case "editpelco":
-                    {
-                        var c = MainForm.Cameras.FirstOrDefault(p => p.id == oid);
-                        if (c != null)
                         {
-                            PopulateObject(d, c);
+                            var c = MainForm.Cameras.FirstOrDefault(p => p.id == oid);
+                            if (c != null)
+                            {
+                                PopulateObject(d, c);
+                            }
                         }
-                    }
                         break;
                     case "settings":
-                    {
-                        PopulateObject(d, MainForm.Conf);
-                        if (!string.IsNullOrEmpty(MainForm.Conf.Archive))
                         {
-                            MainForm.Conf.Archive = MainForm.Conf.Archive.Replace("/", @"\");
-                            if (!MainForm.Conf.Archive.EndsWith(@"\"))
-                                MainForm.Conf.Archive += @"\";
+                            PopulateObject(d, MainForm.Conf);
+                            if (!string.IsNullOrEmpty(MainForm.Conf.Archive))
+                            {
+                                MainForm.Conf.Archive = MainForm.Conf.Archive.Replace("/", @"\");
+                                if (!MainForm.Conf.Archive.EndsWith(@"\"))
+                                    MainForm.Conf.Archive += @"\";
+                            }
+                            ReloadAllowedIPs();
+                            ReloadAllowedReferrers();
+                            MainForm.SaveConfig();
+                            saveObjects = false;
                         }
-                        ReloadAllowedIPs();
-                        ReloadAllowedReferrers();
-                        MainForm.SaveConfig();
-                        saveObjects = false;
-                    }
                         break;
                     case "editftpserver":
-                    {
-                        resp = "{\"actionResult\":\"reloadFTPServers\"}";
-                        if (d.ident == "new")
                         {
-                            d.ident = Guid.NewGuid().ToString();
-                            var cfgs = new configurationServer {ident = d.ident};
-                            var l = MainForm.Conf.FTPServers.ToList();
-                            l.Add(cfgs);
-                            MainForm.Conf.FTPServers = l.ToArray();
-                        }
+                            resp = "{\"actionResult\":\"reloadFTPServers\"}";
+                            if (d.ident == "new")
+                            {
+                                d.ident = Guid.NewGuid().ToString();
+                                var cfgs = new configurationServer { ident = d.ident };
+                                var l = MainForm.Conf.FTPServers.ToList();
+                                l.Add(cfgs);
+                                MainForm.Conf.FTPServers = l.ToArray();
+                            }
 
-                        PopulateObject(d, MainForm.Conf.FTPServers.First(p => p.ident == d.ident.ToString()));
-                        MainForm.SaveConfig();
-                        saveObjects = false;
-                    }
+                            PopulateObject(d, MainForm.Conf.FTPServers.First(p => p.ident == d.ident.ToString()));
+                            MainForm.SaveConfig();
+                            saveObjects = false;
+                        }
                         break;
                     case "editstorage":
-                    {
-                        resp = "{\"actionResult\":\"reloadStorage\"}";
-                        if (d.ident.ToString() == "new")
                         {
-                            d.ident = MainForm.Conf.MediaDirectories.Max(p => p.ID) + 1;
-                        }
-                        int idnew = Convert.ToInt32(d.ident);
-                        d.ident = idnew;
-
-                        var md = MainForm.Conf.MediaDirectories.FirstOrDefault(p => p.ID == idnew);
-                        bool ndir = false;
-                        if (md == null)
-                        {
-                            md = new configurationDirectory {ID = d.ident, Entry = ""};
-                            ndir = true;
-                        }
-
-                        var exdir = md.Entry;
-                        PopulateObject(d, md);
-                        md.Entry = md.Entry.Replace("/", @"\");
-                        if (!md.Entry.EndsWith(@"\"))
-                            md.Entry += @"\";
-
-                        try
-                        {
-                            if (!Directory.Exists(md.Entry))
+                            resp = "{\"actionResult\":\"reloadStorage\"}";
+                            if (d.ident.ToString() == "new")
                             {
-                                throw new Exception("Invalid Directory");
+                                d.ident = MainForm.Conf.MediaDirectories.Max(p => p.ID) + 1;
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            if (exdir != "")
-                                md.Entry = exdir;
-                            resp = "{\"actionResult\":\"reloadStorage\",\"error\":\"" + ex.Message.JsonSafe() + "\"}";
-                            break;
-                        }
+                            int idnew = Convert.ToInt32(d.ident);
+                            d.ident = idnew;
 
-                        if (ndir)
-                        {
-                            var l = MainForm.Conf.MediaDirectories.ToList();
-                            l.Add(md);
-                            MainForm.Conf.MediaDirectories = l.ToArray();
-                        }
-                        else
-                        {
-                            var di = new DirectoryInfo(exdir);
-                            var di2 = new DirectoryInfo(md.Entry);
-                            if (di.ToString() != di2.ToString())
+                            var md = MainForm.Conf.MediaDirectories.FirstOrDefault(p => p.ID == idnew);
+                            bool ndir = false;
+                            if (md == null)
                             {
-                                var t = new Thread(() => Helper.CopyFolder(exdir, md.Entry)) {IsBackground = true};
-                                t.Start();
-                                resp =
-                                    "{\"actionResult\":\"reloadStorage\",\"message\":\""+LocRm.GetString("MediaBeingCopied", lc) +"\"}";
+                                md = new configurationDirectory { ID = d.ident, Entry = "" };
+                                ndir = true;
                             }
-                        }
 
-                        MainForm.SaveConfig();
-                        saveObjects = false;
-                    }
+                            var exdir = md.Entry;
+                            PopulateObject(d, md);
+                            md.Entry = md.Entry.Replace("/", @"\");
+                            if (!md.Entry.EndsWith(@"\"))
+                                md.Entry += @"\";
+
+                            try
+                            {
+                                if (!Directory.Exists(md.Entry))
+                                {
+                                    throw new Exception("Invalid Directory");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                if (exdir != "")
+                                    md.Entry = exdir;
+                                resp = "{\"actionResult\":\"reloadStorage\",\"error\":\"" + ex.Message.JsonSafe() + "\"}";
+                                break;
+                            }
+
+                            if (ndir)
+                            {
+                                var l = MainForm.Conf.MediaDirectories.ToList();
+                                l.Add(md);
+                                MainForm.Conf.MediaDirectories = l.ToArray();
+                            }
+                            else
+                            {
+                                var di = new DirectoryInfo(exdir);
+                                var di2 = new DirectoryInfo(md.Entry);
+                                if (di.ToString() != di2.ToString())
+                                {
+                                    var t = new Thread(() => Helper.CopyFolder(exdir, md.Entry)) { IsBackground = true };
+                                    t.Start();
+                                    resp =
+                                        "{\"actionResult\":\"reloadStorage\",\"message\":\"" + LocRm.GetString("MediaBeingCopied", lc) + "\"}";
+                                }
+                            }
+
+                            MainForm.SaveConfig();
+                            saveObjects = false;
+                        }
                         break;
                     case "editcamera":
                         {
@@ -2102,7 +2104,7 @@ namespace iSpyApplication.Server
                                     if (!Helper.IsAlphaNumeric(newdir))
                                     {
                                         c.directory = olddir;
-                                        resp = "{\"error\":\""+LocRm.GetString("DirectoryInvalid", lc) +"\"}";
+                                        resp = "{\"error\":\"" + LocRm.GetString("DirectoryInvalid", lc) + "\"}";
                                     }
                                     else
                                     {
@@ -2115,7 +2117,7 @@ namespace iSpyApplication.Server
                                         catch (Exception ex)
                                         {
                                             c.directory = olddir;
-                                            resp = "{\"error\":\""+ex.Message.JsonSafe()+"\"}";
+                                            resp = "{\"error\":\"" + ex.Message.JsonSafe() + "\"}";
                                         }
                                     }
                                 }
@@ -2124,28 +2126,28 @@ namespace iSpyApplication.Server
                         }
                         break;
                     case "motionzones":
-                    {
-                        var c = MainForm.Cameras.FirstOrDefault(p => p.id == oid);
-                        if (c != null)
                         {
-                            var lz = new List<objectsCameraDetectorZone>();
-                            if (d.zones != null)
+                            var c = MainForm.Cameras.FirstOrDefault(p => p.id == oid);
+                            if (c != null)
                             {
-                                foreach (var z in d.zones)
+                                var lz = new List<objectsCameraDetectorZone>();
+                                if (d.zones != null)
                                 {
-                                    var x = Convert.ToInt32(z["x"].Value);
-                                    var y = Convert.ToInt32(z["y"].Value);
-                                    var w = Convert.ToInt32(z["w"].Value);
-                                    var h = Convert.ToInt32(z["h"].Value);
-                                    lz.Add(new objectsCameraDetectorZone { height = h, left = x, top = y, width = w });
+                                    foreach (var z in d.zones)
+                                    {
+                                        var x = Convert.ToInt32(z["x"].Value);
+                                        var y = Convert.ToInt32(z["y"].Value);
+                                        var w = Convert.ToInt32(z["w"].Value);
+                                        var h = Convert.ToInt32(z["h"].Value);
+                                        lz.Add(new objectsCameraDetectorZone { height = h, left = x, top = y, width = w });
+                                    }
                                 }
+                                c.detector.motionzones = lz.ToArray();
+                                var cw = MainForm.InstanceReference.GetCameraWindow(oid);
+                                cw?.Camera?.SetMotionZones(lz.ToArray());
                             }
-                            c.detector.motionzones = lz.ToArray();
-                            var cw = MainForm.InstanceReference.GetCameraWindow(oid);
-                            cw?.Camera?.SetMotionZones(lz.ToArray());
+                            saveObjects = false;
                         }
-                        saveObjects = false;
-                    }
                         break;
                     case "screenarea":
                         {
@@ -2178,7 +2180,7 @@ namespace iSpyApplication.Server
                             }
                             saveObjects = false;
                         }
-                        
+
                         break;
                     case "pip":
                         {
@@ -2199,7 +2201,7 @@ namespace iSpyApplication.Server
                                     }
                                 }
                                 c.settings.pip.config = cfg.Trim('|');
-                                
+
                                 var cw = MainForm.InstanceReference.GetCameraWindow(oid);
                                 if (cw?.Camera != null)
                                 {
@@ -2209,7 +2211,7 @@ namespace iSpyApplication.Server
                             }
                             saveObjects = false;
                         }
-                        
+
                         break;
                     case "editmicrophone":
                         {
@@ -2225,7 +2227,7 @@ namespace iSpyApplication.Server
                                     if (!Helper.IsAlphaNumeric(newdir))
                                     {
                                         c.directory = olddir;
-                                        resp = "{\"error\":\""+LocRm.GetString("DirectoryInvalid", lc) +"\"}";
+                                        resp = "{\"error\":\"" + LocRm.GetString("DirectoryInvalid", lc) + "\"}";
                                     }
                                     else
                                     {
@@ -2241,7 +2243,7 @@ namespace iSpyApplication.Server
                                             resp = "{\"error\":\"" + ex.Message.JsonSafe() + "\"}";
                                         }
                                     }
-                                } 
+                                }
                                 MainForm.InstanceReference.SaveObjectList(false);
                             }
                         }
@@ -2340,28 +2342,28 @@ namespace iSpyApplication.Server
                             if (Helper.WebRestrictedAlertTypes.Contains(a.type))
                             {
                                 a.param1 = a.param1.Replace("/", "\\");
-                                if (a.param1.IndexOf("\\", StringComparison.Ordinal)!=-1)
+                                if (a.param1.IndexOf("\\", StringComparison.Ordinal) != -1)
                                 {
-                                    resp = "{\"error\":\""+LocRm.GetString("NoPathsAllowed", lc) +"\"}";
+                                    resp = "{\"error\":\"" + LocRm.GetString("NoPathsAllowed", lc) + "\"}";
                                     a.param1 = p1;
                                 }
                             }
-                            
+
                             MainForm.InstanceReference.SaveObjectList(false);
                         }
                         break;
                     case "editaudiosource":
-                    {
-                        var c = MainForm.Microphones.FirstOrDefault(p => p.id == oid);
-                        if (c != null)
                         {
-                            PopulateObject(d, c);
-                            
-                            var vl = MainForm.InstanceReference.GetVolumeLevel(c.id);
-                            vl?.Disable();
+                            var c = MainForm.Microphones.FirstOrDefault(p => p.id == oid);
+                            if (c != null)
+                            {
+                                PopulateObject(d, c);
+
+                                var vl = MainForm.InstanceReference.GetVolumeLevel(c.id);
+                                vl?.Disable();
+                            }
+                            resp = "{\"actionResult\":\"waiteditobject\"}";
                         }
-                        resp = "{\"actionResult\":\"waiteditobject\"}";
-                    }
                         break;
                     case "editvideosource":
                         {
@@ -2466,7 +2468,7 @@ namespace iSpyApplication.Server
             }
             catch
             {
-                Logger.LogException(new Exception(apiJson),"BuildAPIPopulate");
+                Logger.LogException(new Exception(apiJson), "BuildAPIPopulate");
                 throw;
             }
         }
@@ -2538,7 +2540,7 @@ namespace iSpyApplication.Server
                 }
             }
             var typ = item["type"];
-            if (typ != null && (typ.Value == "Button" || typ.Value=="Link"))
+            if (typ != null && (typ.Value == "Button" || typ.Value == "Link"))
             {
                 var val = item["value"];
                 if (val != null)
@@ -2548,13 +2550,13 @@ namespace iSpyApplication.Server
 
                     val.Value = LocRm.GetString(tag, lc);
                 }
-                
+
             }
         }
 
         private string TagUp(string v)
         {
-            return "json."+v.ToLower().Replace(" ", "").Replace("(", "").Replace(")", "").Replace("/", "");
+            return "json." + v.ToLower().Replace(" ", "").Replace("(", "").Replace(")", "").Replace("/", "");
         }
 
         dynamic PopulateResponse(string resp, object o, string lc)
@@ -2565,7 +2567,7 @@ namespace iSpyApplication.Server
                 string v = d.header.Value.ToString();
                 string t = TagUp(v);
 
-                d.header.Value = LocRm.GetString(t, lc);                
+                d.header.Value = LocRm.GetString(t, lc);
             }
             foreach (var sec in d.sections)
             {
@@ -2587,9 +2589,9 @@ namespace iSpyApplication.Server
                     {
                         var item2 = item;
                         Translate(ref item2, lc);
-                        
+
                         var bt = item["bindto"];
-                        if (bt != null && o!=null)
+                        if (bt != null && o != null)
                         {
                             string[] prop = bt.ToString().Split(',');
                             if (prop.Length == 1)
@@ -2617,7 +2619,7 @@ namespace iSpyApplication.Server
                                     var conv = item["converter"];
                                     if (conv != null)
                                     {
-                                        switch ((string) conv)
+                                        switch ((string)conv)
                                         {
                                             case "daysofweek":
                                                 string[] days = item["value"].ToString().Trim(',').Split(',');
@@ -2632,15 +2634,15 @@ namespace iSpyApplication.Server
                                                 }
                                                 break;
                                             case "datetimetoint":
-                                                var dt = (DateTime) item["value"];
+                                                var dt = (DateTime)item["value"];
                                                 item["value"] = dt.TimeOfDay.TotalMinutes;
                                                 break;
                                             case "fonttofontsize":
-                                                var f = FontXmlConverter.ConvertToFont((string) item["value"]);
+                                                var f = FontXmlConverter.ConvertToFont((string)item["value"]);
                                                 item["value"] = f.Size;
                                                 break;
                                             case "rgbtohex":
-                                                var rgb = (string) item["value"].ToString();
+                                                var rgb = (string)item["value"].ToString();
                                                 var rgbarr = rgb.Split(',');
                                                 if (rgbarr.Length == 3)
                                                 {
@@ -2708,7 +2710,7 @@ namespace iSpyApplication.Server
 
             if (conv != null)
             {
-                switch ((string) conv)
+                switch ((string)conv)
                 {
                     case "daysofweek":
                         string dow = "";
@@ -2729,17 +2731,17 @@ namespace iSpyApplication.Server
                         val = DateTime.MinValue.Add(ts);
                         break;
                     case "fonttofontsize":
-                        var oc = (objectsCamera) o;
+                        var oc = (objectsCamera)o;
                         var font = oc.settings.timestampfont;
                         var f = FontXmlConverter.ConvertToFont(font);
-                        var sz = (float) Convert.ToDecimal(item["value"]);
+                        var sz = (float)Convert.ToDecimal(item["value"]);
                         var f2 = new Font(f.Name, sz, f.Style, f.Unit, f.GdiCharSet, f.GdiVerticalFont);
                         oc.settings.timestampfont = FontXmlConverter.ConvertToString(f2);
                         return;
                     case "rgbtohex":
                         try
                         {
-                            var col = ColorTranslator.FromHtml((string) item["value"].ToString());
+                            var col = ColorTranslator.FromHtml((string)item["value"].ToString());
                             val = col.ToRGBString();
                         }
                         catch (Exception) { }
@@ -2817,7 +2819,7 @@ namespace iSpyApplication.Server
             for (int i = 0; i < fieldNames.Length - 1; i++)
             {
                 string fieldName = fieldNames[i];
-                currentObject = currentObject.GetType().GetProperty(fieldName).GetValue(currentObject,null);
+                currentObject = currentObject.GetType().GetProperty(fieldName).GetValue(currentObject, null);
             }
             var val = currentObject.GetType().GetProperty(fieldNames[fieldNames.Length - 1]);
             var t = val.PropertyType.Name;

@@ -50,7 +50,7 @@
             this.txtSSLCertificate.Margin = new System.Windows.Forms.Padding(6);
             this.txtSSLCertificate.Name = "txtSSLCertificate";
             this.txtSSLCertificate.ReadOnly = true;
-            this.txtSSLCertificate.Size = new System.Drawing.Size(118, 20);
+            this.txtSSLCertificate.Size = new System.Drawing.Size(117, 20);
             this.txtSSLCertificate.TabIndex = 0;
             // 
             // btnOK
@@ -66,7 +66,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(252, 3);
+            this.button2.Location = new System.Drawing.Point(251, 3);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(34, 23);
             this.button2.TabIndex = 4;
@@ -79,7 +79,7 @@
             this.tlpSSL.ColumnCount = 3;
             this.tlpSSL.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 47.94007F));
             this.tlpSSL.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 52.05993F));
-            this.tlpSSL.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 123F));
+            this.tlpSSL.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 124F));
             this.tlpSSL.Controls.Add(this.button2, 2, 0);
             this.tlpSSL.Controls.Add(this.txtSSLCertificate, 1, 0);
             this.tlpSSL.Controls.Add(this.label1, 0, 0);

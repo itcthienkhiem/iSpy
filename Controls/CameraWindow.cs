@@ -2983,6 +2983,9 @@ namespace iSpyApplication.Controls
                     DoAlert("reconnect");
                 }
 
+                CheckSaveFrame();
+                CheckFTP();
+
                 NewFrame?.Invoke(this, e);
 
                 _errorTime = DateTime.MinValue;

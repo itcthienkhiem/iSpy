@@ -793,8 +793,8 @@ namespace iSpyApplication
                     CameraControl.Camobject.settings.onvifident = onvifWizard1.ddlDeviceURL.Text + "|" + onvifWizard1.lbOnvifURLs.SelectedIndex;
                     CameraControl.Camobject.ptz = -5;//onvif
                     CameraControl.Camobject.settings.rtspmode = onvifWizard1.ddlTransport.SelectedIndex;
-                    
-                    SetVideoSize(new Size(cfg.Config.Bounds.width, cfg.Config.Bounds.height));
+
+                    SetVideoSize(new Size(cfg.Width, cfg.Height));
 
                     if (onvifWizard1.ddlConnectWith.SelectedIndex==1)
                     {
@@ -1689,6 +1689,10 @@ namespace iSpyApplication
         private void numAnalyseDuration_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+        private void chkUseGPU_CheckedChanged(object sender, EventArgs e)
+        {
+            CameraControl.Camobject.settings.useGPU = chkUseGPU.Checked;
         }
     }
     
