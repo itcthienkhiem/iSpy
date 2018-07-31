@@ -43,7 +43,7 @@ namespace iSpyApplication.Controls
         private DateTime _recordingStartTime = DateTime.MinValue;
         private Point _mouseLoc;
         private readonly ManualResetEvent _stopWrite = new ManualResetEvent(false);
-        private readonly ManualResetEvent _writerStopped = new ManualResetEvent(false);
+        private readonly ManualResetEvent _writerStopped = new ManualResetEvent(true);
         private volatile float[] _levels;
         private readonly ToolTip _toolTipMic;
         private int _ttind = -1;
@@ -424,7 +424,7 @@ namespace iSpyApplication.Controls
             {
                 try
                 {
-                    return _recordingThread != null && !_recordingThread.Join(TimeSpan.Zero);
+                    return _recordingThread != null;
                 }
                 catch
                 {
@@ -1519,30 +1519,6 @@ namespace iSpyApplication.Controls
             if (Recording)
             {
                 _stopWrite.Set();
-
-                var t = 0;
-                while (Recording && t < 20)
-                {
-                    _writerStopped.WaitOne(200);
-                    t++;
-                }
-                if (t == 20)
-                {
-                    try
-                    {
-                        _recordingThread?.Abort();
-                        Logger.LogError("mic: aborted writing thread");
-                    }
-                    catch
-                    {
-
-                    }
-                }
-
-                var cc = CameraControl;
-                if (cc!=null)
-                    cc.AbortedAudio = true;
-                
             }
         }
 
@@ -1584,7 +1560,6 @@ namespace iSpyApplication.Controls
             string linktofile = "";
             try
             {
-                _stopWrite.Reset();
                 _writerStopped.Reset();
                 if (!string.IsNullOrEmpty(Micobject.recorder.trigger))
                 {
@@ -1604,16 +1579,6 @@ namespace iSpyApplication.Controls
                     }
                 }
                 var cw = CameraControl;
-                //
-                if (cw != null)
-                {
-                    if (cw.AbortedAudio)
-                    {
-                        Logger.LogError(Micobject.name + ": paired recording aborted as the camera is already recording");
-                        ForcedRecording = false;
-                        return;
-                    }
-                }
                 try
                 {
                     if (cw != null)
@@ -1684,7 +1649,7 @@ namespace iSpyApplication.Controls
                                     }
                                     finally
                                     {
-                                        fa.Nullify();
+                                        fa.Dispose();
                                     }
                                 }
                                 else
@@ -1791,13 +1756,17 @@ namespace iSpyApplication.Controls
                 Logger.LogException(ex);
             }
 
+            _recordingThread = null;
             _writerStopped.Set();
+            _stopWrite.Reset();
         }
 
-       
 
+        private bool _disposed;
         protected override void Dispose(bool disposing)
         {
+            if (_disposed)
+                return;
             if (disposing)
             {
                 Invalidate();              
@@ -1810,11 +1779,14 @@ namespace iSpyApplication.Controls
             }
             _toolTipMic.RemoveAll();
             _toolTipMic.Dispose();
+            if (_stopWrite.WaitOne(0))
+                _writerStopped.WaitOne(2000);
             _writerStopped.Close();
             _stopWrite.Close();
             _vline.Dispose();
             ClearBuffer();
             base.Dispose(disposing);
+            _disposed = true;
         }
 
         public void ClearBuffer()
@@ -1824,7 +1796,7 @@ namespace iSpyApplication.Controls
                 Helper.FrameAction fa;
                 while (Buffer.TryDequeue(out fa))
                 {
-                    fa.Nullify();
+                    fa.Dispose();
                 }
                 Buffer = new ConcurrentQueue<Helper.FrameAction>();
             }
@@ -2249,7 +2221,7 @@ namespace iSpyApplication.Controls
                                 if (fa.TimeStamp < dt)
                                 {
                                     if (Buffer.TryDequeue(out fa))
-                                        fa.Nullify();
+                                        fa.Dispose();
                                 }
                                 else
                                 {

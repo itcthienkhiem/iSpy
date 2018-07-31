@@ -18,8 +18,6 @@ namespace iSpyApplication.Realtime
 
         public delegate int InterruptCallback();
 
-        private static readonly bool Hwnvidia = true;
-        private static bool _hwqsv = true;
         private readonly byte[] _convOut = new byte[44100];
         private readonly bool _isAudio;
         private bool _abort;
@@ -29,8 +27,6 @@ namespace iSpyApplication.Realtime
         private AVFrame* _audioFrame, _videoFrame;
 
         private AVIOInterruptCB_callback_func _aviocb;
-        private AVPixelFormat _avPixelFormat = AVPixelFormat.AV_PIX_FMT_YUV420P;
-
         private bool _closing;
         private GCHandle _convHandle;
         private AVFormatContext* _formatContext;
@@ -66,29 +62,34 @@ namespace iSpyApplication.Realtime
         public int OutSampleRate = 22050;
         public long SizeBytes;
         private int _crf;
+        public int GpuIndex = 0;
 
         public int Timeout = 5000;
+
+        public HwEncoder Gpu;
+        public class HwEncoder
+        {
+            public string Codec;
+            public string Name;
+
+            public HwEncoder(string codec, string name)
+            {
+                Codec = codec;
+                Name = name;
+            }
+        }
+
+        public static HwEncoder[] Encoders =
+        {
+            new HwEncoder("h264_nvenc", "nvidia"),
+            new HwEncoder("h264_qsv", "quicksync"),
+            new HwEncoder("h264_amf", "amd"),
+        };
 
         public MediaWriter(): base("Writer")
         {
             
         }
-        //public MediaWriter(string fileName, AVCodecID audioCodec, DateTime created) : base("Writer")
-        //{
-        //    Open(fileName, -1, -1, AVCodecID.AV_CODEC_ID_NONE, 0, audioCodec, created);
-        //    _isAudio = true;
-        //}
-
-        //public MediaWriter(string fileName, int width, int height, AVCodecID videoCodec, DateTime created) : base("Writer")
-        //{
-        //    Open(fileName, width, height, videoCodec, 0, AVCodecID.AV_CODEC_ID_NONE, created);
-        //}
-
-        //public MediaWriter(string fileName, int width, int height, AVCodecID videoCodec, int framerate,
-        //    AVCodecID audioCodec, DateTime created) : base("Writer")
-        //{
-        //    Open(fileName, width, height, videoCodec, framerate, audioCodec, created);
-        //}
 
         public bool Closed => !_opened;
 
@@ -378,9 +379,9 @@ namespace iSpyApplication.Realtime
             }
 
             var bitmapData = frame.LockBits(new Rectangle(0, 0, _width, _height), ImageLockMode.ReadOnly,
-                frame.PixelFormat == PixelFormat.Format8bppIndexed
-                    ? PixelFormat.Format8bppIndexed
-                    : PixelFormat.Format24bppRgb);
+            frame.PixelFormat == PixelFormat.Format8bppIndexed
+                ? PixelFormat.Format8bppIndexed
+                : PixelFormat.Format24bppRgb);
 
             byte*[] srcData = {(byte*) bitmapData.Scan0};
             int[] srcLinesize = {bitmapData.Stride};
@@ -394,9 +395,9 @@ namespace iSpyApplication.Realtime
                     pfmt = AVPixelFormat.AV_PIX_FMT_GRAY8;
                 }
 
-                _pConvertContext = ffmpeg.sws_getCachedContext(_pConvertContext, _videoCodecContext->width,
-                    _videoCodecContext->height, pfmt, _videoCodecContext->width, _videoCodecContext->height,
-                    _videoCodecContext->pix_fmt, ffmpeg.SWS_FAST_BILINEAR, null, null, null);
+                int w = _videoCodecContext->width;
+                int h = _videoCodecContext->height;
+                _pConvertContext = ffmpeg.sws_getContext(w, h, pfmt, w, h,_videoCodecContext->pix_fmt, ffmpeg.SWS_FAST_BILINEAR, null, null, null);
             }
 
 
@@ -641,43 +642,33 @@ namespace iSpyApplication.Realtime
 
         private void GetVideoCodec(AVCodecID baseCodec)
         {
-            if (baseCodec == AVCodecID.AV_CODEC_ID_H264)
+            if (Gpu != null)
             {
-                if (Hwnvidia && MainForm.Conf.GPU.nVidia)
+                _videoCodec = ffmpeg.avcodec_find_encoder_by_name(Gpu.Codec);
+                if (_videoCodec != null)
                 {
-                    _avPixelFormat = AVPixelFormat.AV_PIX_FMT_YUV420P;
-                    _videoCodec = ffmpeg.avcodec_find_encoder_by_name("nvenc_h264");
-                    if (_videoCodec != null)
+                    if (TryOpenVideoCodec(baseCodec, Gpu))
                     {
-                        if (TryOpenVideoCodec(baseCodec))
-                        {
-                            Logger.LogMessage("using Nvidia hardware encoder");
-                            return;
-                        }
+                        Logger.LogMessage("using " + Gpu.Name + " hardware encoder");
+                        return;
                     }
-                }
 
-                if (_hwqsv && MainForm.Conf.GPU.QuickSync)
-                {
-                    _avPixelFormat = AVPixelFormat.AV_PIX_FMT_NV12;
-                    _videoCodec = ffmpeg.avcodec_find_encoder_by_name("h264_qsv");
-                    if (_videoCodec != null)
+                    switch (Gpu.Name)
                     {
-                        if (TryOpenVideoCodec(baseCodec))
-                        {
-                            Logger.LogMessage("using Intel QSV hardware encoder");
-                            return;
-                        }
-                        Logger.LogMessage("Install Intel Media Server Studio and restart iSpy to use QSV");
-                        _hwqsv = false;
+                        case "quicksync":
+                            Logger.LogMessage("Install Intel Media Server Studio to use QSV encoder");
+                            break;
+                        default:
+                            Logger.LogMessage("Update graphics driver to use " + Gpu.Name + " encoder");
+                            break;
                     }
                 }
             }
 
-            _avPixelFormat = AVPixelFormat.AV_PIX_FMT_YUV420P;
+            
             _videoCodec = ffmpeg.avcodec_find_encoder(baseCodec);
 
-            if (TryOpenVideoCodec(baseCodec))
+            if (TryOpenVideoCodec(baseCodec, null))
             {
                 Logger.LogMessage("using software encoder");
                 return;
@@ -687,7 +678,7 @@ namespace iSpyApplication.Realtime
             throw new Exception("Failed opening any codec");
         }
 
-        private bool TryOpenVideoCodec(AVCodecID baseCodec)
+        private bool TryOpenVideoCodec(AVCodecID baseCodec, HwEncoder gpu)
         {
             _videoCodecContext = ffmpeg.avcodec_alloc_context3(_videoCodec);
 
@@ -712,11 +703,9 @@ namespace iSpyApplication.Realtime
                         break;
                 }
             }
-
-            _videoCodecContext->pix_fmt = _avPixelFormat;
-
+            
             //ffmpeg.av_opt_set(_videoCodecContext->priv_data, "tune", "zerolatency", 0);
-
+            _videoCodecContext->pix_fmt = AVPixelFormat.AV_PIX_FMT_YUV420P;
             switch (_videoCodecContext->codec_id)
             {
                 case AVCodecID.AV_CODEC_ID_MPEG1VIDEO:
@@ -729,11 +718,32 @@ namespace iSpyApplication.Realtime
                     ffmpeg.av_opt_set(_videoCodecContext->priv_data, "pkt_size", "1316", 0);
                     break;
                 case AVCodecID.AV_CODEC_ID_H264:
-                    ffmpeg.av_opt_set(_videoCodecContext->priv_data, "profile", "baseline", ffmpeg.AV_OPT_SEARCH_CHILDREN);
-                    ffmpeg.av_opt_set(_videoCodecContext->priv_data, "preset", "veryfast", ffmpeg.AV_OPT_SEARCH_CHILDREN);
-                    ////ffmpeg.av_opt_set(_videoCodecContext->priv_data, "tune", "zerolatency", 0);
+                    ffmpeg.av_opt_set(_videoCodecContext->priv_data, "profile", "baseline", ffmpeg.AV_OPT_SEARCH_CHILDREN); //keep as baseline - otherwise rewind doesn't work
+                    if (gpu != null)
+                    {
+                        ffmpeg.av_opt_set_int(_videoCodecContext->priv_data, "hwaccel_device", GpuIndex, ffmpeg.AV_OPT_SEARCH_CHILDREN);
+                        ffmpeg.av_opt_set(_videoCodecContext->priv_data, "preset", "fast", ffmpeg.AV_OPT_SEARCH_CHILDREN);
+                        _videoCodecContext->bit_rate = 100000000;
+                        switch (gpu.Name)
+                        {
+                            case "amd":
+                                ffmpeg.av_opt_set_int(_videoCodecContext->priv_data, "crf", _crf, ffmpeg.AV_OPT_SEARCH_CHILDREN);
+                                _videoCodecContext->rc_max_rate = 100000000;
+                                _videoCodecContext->rc_min_rate = 50000000;
+                                _videoCodecContext->qmin = 18;
+                                _videoCodecContext->qmax = 46;
+                                _videoCodecContext->max_qdiff = 4;
+                                break;
+                            case "quicksync":
+                                _videoCodecContext->pix_fmt = AVPixelFormat.AV_PIX_FMT_NV12;
+                                break;
+                        }
+                    }
+                    else
+                        ffmpeg.av_opt_set(_videoCodecContext->priv_data, "preset", "veryfast", ffmpeg.AV_OPT_SEARCH_CHILDREN);
+
                     ffmpeg.av_opt_set_int(_videoCodecContext->priv_data, "crf", _crf, ffmpeg.AV_OPT_SEARCH_CHILDREN);
-                    
+
                     break;
                 case AVCodecID.AV_CODEC_ID_HEVC:
                     ffmpeg.av_opt_set(_videoCodecContext->priv_data, "x265-params", "qp=20", 0);
@@ -749,9 +759,11 @@ namespace iSpyApplication.Realtime
                     break;
             }
 
+            
+
             if ((_formatContext->oformat->flags & ffmpeg.AVFMT_GLOBALHEADER) == ffmpeg.AVFMT_GLOBALHEADER)
             {
-                _videoCodecContext->flags |= ffmpeg.CODEC_FLAG_GLOBAL_HEADER;
+                _videoCodecContext->flags |= ffmpeg.AV_CODEC_FLAG_GLOBAL_HEADER;
             }
 
             int cdc;
@@ -853,10 +865,10 @@ namespace iSpyApplication.Realtime
 
             if ((_formatContext->oformat->flags & ffmpeg.AVFMT_GLOBALHEADER) == ffmpeg.AVFMT_GLOBALHEADER)
             {
-                _audioCodecContext->flags |= ffmpeg.CODEC_FLAG_GLOBAL_HEADER;
+                _audioCodecContext->flags |= ffmpeg.AV_CODEC_FLAG_GLOBAL_HEADER;
             }
 
-            if ((codec->capabilities & ffmpeg.CODEC_CAP_EXPERIMENTAL) != 0)
+            if ((codec->capabilities & ffmpeg.AV_CODEC_CAP_EXPERIMENTAL) != 0)
             {
                 _audioCodecContext->strict_std_compliance = -2;
             }

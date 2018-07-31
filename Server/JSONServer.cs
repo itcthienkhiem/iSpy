@@ -544,16 +544,17 @@ namespace iSpyApplication.Server
                         try
                         {
                             var dev = new ONVIFDevice(url, un, pwd);
-                            int i = 0;
-
-                            foreach (var p in dev.Profiles)
+                            var p = dev.Profiles;
+                            if (p == null)
+                                throw new ApplicationException("ONVIF failed to connect");
+                            for (int i = 0; i < p.Length; i++)
                             {
-                                var b = p?.VideoSourceConfiguration?.Bounds;
-                                if (b != null && b.width > 0)
+                                dev.SelectProfile(i);
+                                var ep = dev.Endpoint;
+                                if (ep != null && ep.Width > 0)
                                 {
-                                    resp += string.Format(template, b.width + "x" + b.height, i);
+                                    resp += string.Format(template, dev.Profile.Name + " (" + ep.Width + "x" + ep.Height + ")", i);
                                 }
-                                i++;
                             }
                         }
                         catch (Exception ex)
@@ -1347,7 +1348,7 @@ namespace iSpyApplication.Server
                                     if (ptzEntry?.ExtendedCommands?.Command != null)
                                     {
                                         commands = ptzEntry.ExtendedCommands.Command.Aggregate(commands,
-                                            (current, extcmd) => current + string.Format(template, extcmd.Name.JsonSafe(), extcmd.Value));
+                                            (current, extcmd) => current + string.Format(template, extcmd.Name.JsonSafe(), extcmd.Value.JsonSafe()));
                                     }
                                     if (commands == "")
                                     {
