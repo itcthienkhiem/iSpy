@@ -26,10 +26,7 @@ namespace iSpyApplication
             }
             try
             {
-                var urib = new UriBuilder(server);
-                urib.Port = port;
-
-                var target = urib.ToString();
+                var target = new Uri(server + ":" + port);
                 int i = 0;
                 filename = filename.Replace("{C}", counter.ToString(CultureInfo.InvariantCulture));
                 if (rename)

@@ -698,10 +698,6 @@ public partial class objectsCameraSettings {
     
     private int vlcHeightField;
     
-    private bool useGPUField;
-    
-    private string encoderField;
-    
     public objectsCameraSettings() {
         this.frameintervalField = 0;
         this.timestampfontsizeField = 10;
@@ -753,8 +749,6 @@ public partial class objectsCameraSettings {
         this.resizeHeightField = -1;
         this.vlcWidthField = -1;
         this.vlcHeightField = -1;
-        this.useGPUField = false;
-        this.encoderField = "software";
     }
     
     /// <remarks/>
@@ -1690,30 +1684,6 @@ public partial class objectsCameraSettings {
         }
         set {
             this.vlcHeightField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    [System.ComponentModel.DefaultValueAttribute(false)]
-    public bool useGPU {
-        get {
-            return this.useGPUField;
-        }
-        set {
-            this.useGPUField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    [System.ComponentModel.DefaultValueAttribute("software")]
-    public string encoder {
-        get {
-            return this.encoderField;
-        }
-        set {
-            this.encoderField = value;
         }
     }
 }

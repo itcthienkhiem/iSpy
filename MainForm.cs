@@ -90,8 +90,8 @@ namespace iSpyApplication
         public static int Affiliateid = 0;
         public static string EmailAddress = "", MobileNumber = "";
         public static string Group="";
+        public static int ThrottleFramerate = 40;
         public static float CpuUsage, CpuTotal;
-        public static bool HighCPU;
         public static int RecordingThreads;
         public static List<string> Plugins = new List<string>();
         public static bool NeedsResourceUpdate;
@@ -897,6 +897,10 @@ namespace iSpyApplication
             try
             {
                 ffmpeg.avdevice_register_all();
+                ffmpeg.avcodec_register_all();
+                ffmpeg.avfilter_register_all();
+                ffmpeg.avformat_network_init();
+                ffmpeg.av_register_all();
                 Program.SetFfmpegLogging();
             }
             catch (Exception ex)
@@ -1828,8 +1832,16 @@ namespace iSpyApplication
                     // _cputotalCounter = null;
                     Logger.LogException(ex);
                 }
-
-                HighCPU = CpuTotal > _conf.CPUMax;
+                if (CpuTotal > _conf.CPUMax)
+                {
+                    if (ThrottleFramerate > 1)
+                        ThrottleFramerate--;
+                }
+                else
+                {
+                    if (ThrottleFramerate < 40)
+                        ThrottleFramerate++;
+                }
             }
             else
             {
@@ -3397,7 +3409,11 @@ namespace iSpyApplication
             var window = ContextTarget as CameraWindow;
             if (window != null)
             {
-                window?.Snapshot();
+                var cameraControl = window;
+                string fn = cameraControl.SaveFrame();
+                if (fn != "" && Conf.OpenGrabs)
+                    OpenUrl(fn);
+                //OpenUrl("http://" + IPAddress + ":" + Conf.LANPort + "/livefeed?oid=" + cameraControl.Camobject.id + "&r=" + Random.NextDouble() + "&full=1&auth=" + Identifier);
             }
         }
 
@@ -6295,7 +6311,7 @@ namespace iSpyApplication
             this.tsslPRO.IsLink = true;
             this.tsslPRO.LinkColor = System.Drawing.Color.Blue;
             this.tsslPRO.Name = "tsslPRO";
-            this.tsslPRO.Size = new System.Drawing.Size(58, 25);
+            this.tsslPRO.Size = new System.Drawing.Size(59, 25);
             this.tsslPRO.Text = "Try Agent";
             this.tsslPRO.VisitedLinkColor = System.Drawing.Color.Blue;
             this.tsslPRO.Click += new System.EventHandler(this.tsslPRO_Click);
@@ -6514,7 +6530,7 @@ namespace iSpyApplication
             this.MinimumSize = new System.Drawing.Size(50, 50);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "iSpy";
+            this.Text = "Smart Camera";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.MainFormHelpButtonClicked);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing1);

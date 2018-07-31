@@ -134,10 +134,7 @@ namespace iSpyApplication.Controls
 
             var dev = url;
             var urls = new List<object>();
-            int port = 0;
-            if (chkOverrideRTSPPort.Checked)
-                port = Convert.ToInt32(numRTSP.Value);
-            var od = new ONVIFDevice(dev, txtOnvifUsername.Text, txtOnvifPassword.Text, port);
+            var od = new ONVIFDevice(dev, txtOnvifUsername.Text, txtOnvifPassword.Text);
 
             if (od.Profiles == null)
             {
@@ -162,11 +159,6 @@ namespace iSpyApplication.Controls
                     MessageBox.Show(this, "No media endpoints found", LocRm.GetString("Failed"));
                 }
             }
-        }
-
-        private void chkOverrideRTSPPort_CheckedChanged(object sender, EventArgs e)
-        {
-            numRTSP.Enabled = chkOverrideRTSPPort.Checked;
         }
     }
 }

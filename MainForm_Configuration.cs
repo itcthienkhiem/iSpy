@@ -279,7 +279,7 @@ namespace iSpyApplication
                 if (_conf.Joystick == null)
                     _conf.Joystick = new configurationJoystick();
                 if (_conf.GPU == null)
-                    _conf.GPU = new configurationGPU {nVidia = false, QuickSync = false, amd=false};
+                    _conf.GPU = new configurationGPU {nVidia = false, QuickSync = false};
 
                 if (string.IsNullOrEmpty(_conf.AppendLinkText))
                     _conf.AppendLinkText = "<br/>ispyconnect.com";

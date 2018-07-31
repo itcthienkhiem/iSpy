@@ -303,17 +303,30 @@ namespace iSpyApplication.Sources.Video.Ximea
                 _camera.StartAcquisition( );
 
                 // while there is no request for stop
-                while ( !_abort.WaitOne(10) && !MainForm.ShuttingDown )
+                while ( !_abort.WaitOne(0) && !MainForm.ShuttingDown )
                 {
                     // start time
                     DateTime start = DateTime.Now;
 
                     // get next frame
-                    if (ShouldEmitFrame)
+                    if (EmitFrame)
                     {
                         using (var bitmap = _camera.GetImage(15000, false))
                         {
                             NewFrame?.Invoke(this, new NewFrameEventArgs(bitmap));
+                        }
+                    }
+
+                    // wait for a while ?
+                    if (FrameInterval > 0)
+                    {
+                        // get download duration
+                        var span = DateTime.UtcNow.Subtract(start);
+                        // milliseconds to sleep
+                        var msec = FrameInterval - (int)span.TotalMilliseconds;
+                        if (msec > 0)
+                        {
+                            _abort.WaitOne(msec);
                         }
                     }
                 }

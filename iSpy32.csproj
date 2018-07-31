@@ -7,7 +7,7 @@
     <ProjectGuid>{F4799C73-DEE9-48F2-B626-32149CC30976}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>ispy.ico</ApplicationIcon>
+    <ApplicationIcon>if_web_camera_45452.ico</ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>iSpy</AssemblyName>
@@ -184,8 +184,8 @@
       <HintPath>packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FFmpeg.AutoGen, Version=4.0.0.2, Culture=neutral, PublicKeyToken=9b7632533a381715, processorArchitecture=MSIL">
-      <HintPath>packages\FFmpeg.AutoGen.4.0.0.2\lib\net45\FFmpeg.AutoGen.dll</HintPath>
+    <Reference Include="FFmpeg.AutoGen, Version=3.4.0.6, Culture=neutral, PublicKeyToken=9b7632533a381715, processorArchitecture=MSIL">
+      <HintPath>packages\FFmpeg.AutoGen.3.4.0.6\lib\net45\FFmpeg.AutoGen.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FlickrNet, Version=3.24.0.0, Culture=neutral, PublicKeyToken=2491df59efa5d132, processorArchitecture=MSIL">
@@ -371,8 +371,6 @@
     </Compile>
     <Compile Include="CameraDiscovery\CameraScanner.cs" />
     <Compile Include="CameraDiscovery\URLDiscovery.cs" />
-    <Compile Include="Onvif\AuthBehaviour.cs" />
-    <Compile Include="Onvif\AuthMessageInspector.cs" />
     <Compile Include="PlayerVLC.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -387,8 +385,8 @@
     <Compile Include="Sources\Audio\talk\TalkDoorbird.cs" />
     <Compile Include="Sources\Audio\talk\WaveFormatConverter.cs" />
     <Compile Include="Sources\Video\FFmpegBase.cs" />
-    <Compile Include="Sources\Audio\TinyAudioProcessor.cs" />
     <Compile Include="Sources\Video\MediaStream.cs" />
+    <Compile Include="Sources\Audio\TinyAudioProcessor.cs" />
     <Compile Include="Sources\Video\VideoCaptureDevice.cs" />
     <Compile Include="Sources\Video\Tokeniser.cs" />
     <Compile Include="Cloud\CloudGateway.cs" />
@@ -824,6 +822,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="LayoutItem.cs" />
+    <Compile Include="Onvif\BasicAuthBehaviour.cs" />
+    <Compile Include="Onvif\BasicAuthMessageInspector.cs" />
     <Compile Include="Onvif\Discovery.cs" />
     <Compile Include="Onvif\MulticastCapabilitiesBindingElement.cs" />
     <Compile Include="Onvif\ONVIFDevice.cs" />
@@ -833,6 +833,8 @@
     <Compile Include="Controls\ONVIFWizard.Designer.cs">
       <DependentUpon>ONVIFWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Onvif\PasswordDigestBehaviour.cs" />
+    <Compile Include="Onvif\PasswordDigestMessageInspector.cs" />
     <Compile Include="Realtime\MediaWriter.cs" />
     <Compile Include="Sources\Audio\talk\TalkFoscam.cs" />
     <Compile Include="Sources\Video\VideoBase.cs" />
@@ -1212,8 +1214,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\DataSources\System.Xml.XmlElement.datasource" />
+    <None Include="Service References\DeviceClient\common.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\DeviceClient\configuration91.svcinfo" />
     <None Include="Service References\DeviceClient\configuration.svcinfo" />
+    <None Include="Service References\DeviceClient\devicemgmt1.wsdl" />
     <None Include="Service References\DeviceClient\iSpyApplication.DeviceClient.BackupFile.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -1265,6 +1271,9 @@
     <None Include="Service References\DeviceClient\iSpyApplication.DeviceClient.IPAddressFilter.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\DeviceClient\iSpyApplication.DeviceClient.LocationEntity.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\DeviceClient\iSpyApplication.DeviceClient.NetworkGateway.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -1312,6 +1321,9 @@
     </None>
     <None Include="Service References\DeviceClient\iSpyApplication.DeviceClient.User.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\DeviceClient\onvif1.xsd">
+      <SubType>Designer</SubType>
     </None>
     <None Include="Service References\DeviceClient\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
@@ -1491,32 +1503,32 @@
     <Content Include="DLLS\Renci.SshNet.dll" />
     <Content Include="DLLS\Renderers.dll" />
     <Content Include="DLLS\Windows7ToolStripRenderer.dll" />
-    <Content Include="DLLS\x64\avcodec-58.dll" />
-    <Content Include="DLLS\x64\avdevice-58.dll" />
-    <Content Include="DLLS\x64\avfilter-7.dll" />
-    <Content Include="DLLS\x64\avformat-58.dll" />
-    <Content Include="DLLS\x64\avutil-56.dll" />
+    <Content Include="DLLS\x64\avcodec-57.dll" />
+    <Content Include="DLLS\x64\avdevice-57.dll" />
+    <Content Include="DLLS\x64\avfilter-6.dll" />
+    <Content Include="DLLS\x64\avformat-57.dll" />
+    <Content Include="DLLS\x64\avutil-55.dll" />
     <Content Include="DLLS\x64\ffmpeg.exe" />
     <Content Include="DLLS\x64\Interop.NETWORKLIST.dll" />
     <Content Include="DLLS\x64\libmp3lame.64.dll" />
     <Content Include="DLLS\x64\Microsoft.Kinect.dll" />
     <Content Include="DLLS\x64\msvcp120.dll" />
     <Content Include="DLLS\x64\msvcr120.dll" />
-    <Content Include="DLLS\x64\postproc-55.dll" />
-    <Content Include="DLLS\x64\swresample-3.dll" />
-    <Content Include="DLLS\x64\swscale-5.dll" />
-    <Content Include="DLLS\x86\avcodec-58.dll" />
-    <Content Include="DLLS\x86\avdevice-58.dll" />
-    <Content Include="DLLS\x86\avfilter-7.dll" />
-    <Content Include="DLLS\x86\avformat-58.dll" />
-    <Content Include="DLLS\x86\avutil-56.dll" />
+    <Content Include="DLLS\x64\postproc-54.dll" />
+    <Content Include="DLLS\x64\swresample-2.dll" />
+    <Content Include="DLLS\x64\swscale-4.dll" />
+    <Content Include="DLLS\x86\avcodec-57.dll" />
+    <Content Include="DLLS\x86\avdevice-57.dll" />
+    <Content Include="DLLS\x86\avfilter-6.dll" />
+    <Content Include="DLLS\x86\avformat-57.dll" />
+    <Content Include="DLLS\x86\avutil-55.dll" />
     <Content Include="DLLS\x86\ffmpeg.exe" />
     <Content Include="DLLS\x86\libmp3lame.32.dll" />
     <Content Include="DLLS\x86\msvcp120.dll" />
     <Content Include="DLLS\x86\msvcr120.dll" />
-    <Content Include="DLLS\x86\postproc-55.dll" />
-    <Content Include="DLLS\x86\swresample-3.dll" />
-    <Content Include="DLLS\x86\swscale-5.dll" />
+    <Content Include="DLLS\x86\postproc-54.dll" />
+    <Content Include="DLLS\x86\swresample-2.dll" />
+    <Content Include="DLLS\x86\swscale-4.dll" />
     <Content Include="DLLS\xiApi.NET.dll" />
     <None Include="Service References\DeviceImaging\configuration91.svcinfo" />
     <None Include="Service References\DeviceImaging\configuration.svcinfo" />
@@ -1524,6 +1536,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Resources\security-camera-icon.png" />
+    <None Include="Resources\if_web_camera_45452.png" />
+    <Content Include="if_web_camera_45452.ico" />
     <Content Include="XML\Translations.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1684,14 +1699,10 @@
     <None Include="Service References\DeviceClient\bf-2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\DeviceClient\devicemgmt.wsdl" />
     <None Include="Service References\DeviceClient\include.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\DeviceClient\item.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DeviceClient\onvif.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\DeviceClient\t-1.xsd">

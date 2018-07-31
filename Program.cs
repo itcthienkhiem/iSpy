@@ -266,7 +266,7 @@ internal static class Program
     public static unsafe void SetFfmpegLogging()
     {
 #if DEBUG
-        ffmpeg.av_log_set_level(ffmpeg.AV_LOG_ERROR);
+        ffmpeg.av_log_set_level(ffmpeg.AV_LOG_DEBUG);
 #else
         ffmpeg.av_log_set_level(ffmpeg.AV_LOG_ERROR);
 #endif

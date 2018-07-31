@@ -125,13 +125,15 @@ namespace iSpyApplication.Sources.Video
         {
             _abort = new ManualResetEvent(false);
             double multiX = 0, multiY=0;
-            while (!_abort.WaitOne(10) && !MainForm.ShuttingDown)
+            while (!_abort.WaitOne(0) && !MainForm.ShuttingDown)
             {
                 try
                 {
+                    DateTime start = DateTime.UtcNow;
+
                     var nf = NewFrame;
                     // provide new image to clients
-                    if (nf != null && ShouldEmitFrame)
+                    if (nf != null && EmitFrame)
                     {
                         Screen s = Screen.AllScreens[_screenindex];                        
                         if (_screenSize == Rectangle.Empty)
@@ -192,6 +194,19 @@ namespace iSpyApplication.Sources.Video
                             // notify client
                             nf.Invoke(this, new NewFrameEventArgs(target));
                             _error = false;
+                        }
+                    }
+
+                    // wait for a while ?
+                    if (FrameInterval > 0)
+                    {
+                        // get download duration
+                        TimeSpan span = DateTime.UtcNow.Subtract(start);
+                        // milliseconds to sleep
+                        int msec = FrameInterval - (int)span.TotalMilliseconds;
+                        if (msec > 0)
+                        {
+                            _abort.WaitOne(msec);
                         }
                     }
                 }
