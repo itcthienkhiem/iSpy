@@ -1771,7 +1771,7 @@ namespace iSpyApplication
             this.tblJoystick.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
             this.tblJoystick.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
             this.tblJoystick.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.tblJoystick.Size = new System.Drawing.Size(846, 607);
+            this.tblJoystick.Size = new System.Drawing.Size(846, 610);
             this.tblJoystick.TabIndex = 0;
             // 
             // label34
